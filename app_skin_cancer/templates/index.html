@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Main
+{% endblock title %}
+
+{% block stylesheets %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="right_col" role="main">
+    <div class="">
+        <!-- title of web page -->
+        <div class="page-title">
+            <div class="title_left">
+                <h2>AI-Medical Hub</h2> <hr>
+            </div>
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>    
+
+        <div class="clearfix"></div>        
+
+        <!-- system subtitle -->
+        <div class="">
+            <div class="bs-example">
+                <div class="jumbotron">
+                    <h3 style="text-align: center;">Modular System of Automatized Analysis & Diagnosis of Diaseases by Imagenology and Clinical Data</h3>
+                    <h4>
+                        A Intelligent Modular Medical System Solution based on multidisciplinary integration of Artificial Intelligence, Analytics, Business Intelligence,
+                        Software Engineering, Cloud Computing, High Performance Computing and Medical Specialties
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- panel of modules -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <!-- subtitle -->
+                    <div class="x_title">
+                        <h2>System Modules</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                              <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                              </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                          </ul>
+                          <div class="clearfix"></div>
+                    </div>
+                    <!-- subcontent -->
+                    <div class="x_content">
+                        <div class="col-md-4">
+                            <button class="module-button">
+                                <img src="static/img/dermatology.png" alt="Icon">
+                                <span>&nbsp; Dermatological Diseases</span>
+                            </button> <br>
+                            <button class="module-button">
+                                <img src="static/img/respiratory.png" alt="Icon">
+                                <span>&nbsp; Respiratory and Epidemiological Diseases</span>
+                            </button> <br>
+                            <button class="module-button">
+                                <img src="static/img/gastroenteorological.png" alt="Icon">
+                                <span>&nbsp; Gastroenteorological Diseases</span>
+                            </button> <br>                       
+                        </div>
+                        <div class="col-md-4">
+                            <button class="module-button">
+                                <img src="static/img/cardiology.png" alt="Icon">
+                                <span>&nbsp; Cardiological Diseases</span>
+                            </button> <br>
+                            <button class="module-button">
+                                <img src="static/img/neurology.png" alt="Icon">
+                                <span>&nbsp; Neurological Diseases</span>
+                            </button> <br>
+                            <button class="module-button">
+                                <img src="static/img/urology.png" alt="Icon">
+                                <span>&nbsp; Urological Diseases</span>
+                            </button> <br>                                               
+                        </div>
+                        <div class="col-md-4">
+                            <button class="module-button">
+                                <img src="static/img/ophtamological.png" alt="Icon">
+                                <span>&nbsp; Ophtamological Diseases</span>
+                            </button> <br>
+                            <button class="module-button">
+                                <img src="static/img/rheumatology.png" alt="Icon">
+                                <span>&nbsp; Rheumatological Diseases</span>
+                            </button> <br>
+                            <button class="module-button">
+                                <img src="static/img/hematology.png" alt="Icon">
+                                <span>&nbsp; Hematological Diseases</span>
+                            </button> <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    {{ super() }}
+{% endblock javascripts %}
+

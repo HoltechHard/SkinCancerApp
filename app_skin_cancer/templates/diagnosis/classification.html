@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Diagnosis - Classification
+{% endblock title %}
+
+{% block stylesheets %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/classification.css') }}" rel="stylesheet">
+    <!-- Dropzone.js -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='gentelella/vendors/dropzone/dist/min/dropzone.min.css') }}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="right_col" role="main">
+    <div class="">
+        <!-- title of web page -->
+        <div class="page-title">
+            <div class="title_left">
+                <h2>AI-Medical System</h2> <hr>
+            </div>
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>  
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <!-- system subtitle -->
+        <div class="">
+            <div class="bs-example">
+                <div class="jumbotron">
+                    <h3 style="text-align: center;">Registration and Diagnosis Prediction</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- registration form panel -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <!-- subtitle -->
+                    <div class="x_title">
+                        <h2>Registration</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                              <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                              </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                          </ul>
+                          <div class="clearfix"></div>
+                    </div>
+                    <!-- subcontent -->
+                    <div class="x_content">
+                        <br />
+                        
+                        <form id="frmPatientData" action="/diagnosis/classification" class="form-horizontal form-label-left input_mask" method="POST" enctype="multipart/form-data">
+                            <!-- full_name -->
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" id="txtFullName" name="txtFullName" placeholder="Full name">
+                                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                </div>                                
+                            </div>
+                            
+                            <!-- age -->
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-6 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" id="txtAge" name="txtAge" style="width: 50%;" placeholder="Age">
+                                    <span class="fa fa-birthday-cake form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- anatomy -->
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" id="txtAnatomy" name="txtAnatomy" placeholder="Anatomy">
+                                    <span class="fa fa-user-md form-control-feedback left" aria-hidden="true"></span>
+                                </div>                                
+                            </div>
+
+                            <!-- sex -->
+                            <div class="form-group">                                
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <label class="control-label col-md-3 col-sm-3">Gender</label> &nbsp;
+                                    <div id="gender" class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                          <input type="radio" name="gender" class="gender" value="M"> &nbsp; Male &nbsp;
+                                        </label>
+                                        <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                          <input type="radio" name="gender" class="gender" value="F"> Female
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- type of image -->
+                            <div class="form-group">                                
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <label class="control-label col-md-3 col-sm-3">Type of image</label>
+                                    <div class="col-md-9 col-sm-9">
+                                        <select class="form-control" id="cboTypeImage" name="cboTypeImage">
+                                            <option> --- Choose option ---</option>
+                                            {% for type in lst_type_imgs %}
+                                                <option value="{{ type.id }}">{{ type.description }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <input type="hidden" id="hidden_combo" name="hidden_combo" value="">
+                                </div>
+                            </div>
+
+                            <!-- upload image -->
+                            <label class="control-label">Upload skin cancer image</label> <br><br>
+                            <input type="file" id="file" name="file" class="dropzone">
+                            <!--<form id="frmImageUpload" action="/diagnosis/classification" class="dropzone" method="POST" enctype="multipart/form-data"></form>-->
+                            <br><br>
+
+                            <!-- button area -->
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button type="submit" class="btn btn-primary">Submit and Predict</button>
+                                    <button id="btnClean" type="button" class="btn btn-success">Clean</button>
+                                </div>
+                            </div>
+                            <br><br>
+                        </form>
+                        <!---->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <!-- prediction form panel -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <!-- subtitle -->
+                    <div class="x_title">
+                        <h2>Prediction</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                              <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                              </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                          </ul>
+                          <div class="clearfix"></div>
+                    </div>
+
+                    <!-- subcontent -->
+                    <div class="x_content">
+                        <br />
+                        
+                        <!-- prediction results -->
+                        <div id="predictionContainer" name="predictionContainer">
+                            <p id="lblLabelPred" name="lblProbPred"><b>Class Predicted: </b></p>
+                            <p id="lblProbPred" name="lblProbPred"><b>Probability: </b></p>
+                        </div>
+
+                        <!-- probability distribution -->
+                        {% for i in range(7) %}
+                        <div class="widget_summary">
+                            <!-- class label -->
+                            <div class="w_left w_25">
+                                <span class="grh_lblPred"></span>
+                            </div>
+                            <!-- prob bars -->
+                            <div class="w_center w_55">
+                                <div class="progress">
+                                    <div class="progress-bar bg-green" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                        <span class="sr-only">100% complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- prob value -->
+                            <div class="w_right w_20">
+                                <span class="grh_probPred"></span>
+                            </div>
+                            
+                            <div class="clearfix"></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    {{ super() }}    
+    <!-- own scripts -->    
+    <script src="{{ url_for('static', filename='js/classification.js') }}"></script>
+    <!-- Chart.js -->
+    <script src="{{ url_for('static', filename='gentelella/vendors/Chart.js/dist/Chart.min.js') }}"></script>    
+    <!-- Flot -->
+    <script src="{{ url_for('static', filename='gentelella/vendors/Flot/jquery.flot.js') }}"></script>
+    <script src="{{ url_for('static', filename='gentelella/vendors/Flot/jquery.flot.pie.js') }}"></script>
+    <script src="{{ url_for('static', filename='gentelella/vendors/Flot/jquery.flot.time.js') }}"></script>
+    <script src="{{ url_for('static', filename='gentelella/vendors/Flot/jquery.flot.stack.js') }}"></script>
+    <script src="{{ url_for('static', filename='gentelella/vendors/Flot/jquery.flot.resize.js') }}"></script>
+    <!-- Flot plugins -->
+    <script src="{{ url_for('static', filename='gentelella/vendors/flot.orderbars/js/jquery.flot.orderBars.js') }}"></script>
+    <script src="{{ url_for('static', filename='gentelella/vendors/flot-spline/js/jquery.flot.spline.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='gentelella/vendors/flot.curvedlines/curvedLines.js') }}"></script>
+
+    <!-- Dropzone.js -->
+    <script src="{{ url_for('static', filename='gentelella/vendors/dropzone/dist/min/dropzone.min.js') }}"></script>
+{% endblock javascripts %}
