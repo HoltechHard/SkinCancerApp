@@ -1,0 +1,18 @@
+{
+    "list_models": {
+        "vit-B/16": "google/vit-base-patch16-224-in21k",
+        "vit-L/16": "google/vit-large-patch16-224-in21k",
+        "vit-L/32": "google/vit-large-patch32-384",
+        "vit-H/14": "google/vit-huge-patch14-224-in21k"
+    }, 
+
+    "class_names": [
+        "nevus", 
+        "melanoma", 
+        "seborrheic keratosis", 
+        "basal cell carcinoma", 
+        "actinic keratosis", 
+        "squamous cell carcinoma",
+        "pigmented benign keratosis"
+    ]
+}
