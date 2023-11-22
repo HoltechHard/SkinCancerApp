@@ -1,0 +1,33 @@
+====================================================
+|              BACKEND COMMAND LINES               |
+====================================================
+
+1) create the virtual environment
+
+> python -m venv flask_env
+
+2) init the virtual environment
+
+> .\flask_env\Scripts\activate
+
+3) install flask framework
+
+(flask_env) > pip install Flask
+
+4) install mysql connector
+
+(flask_env) > pip install mysql-connector-python
+
+5) create folder for flask application and take position there
+
+> mkdir app_skin_cancer
+
+> cd app_skin_cancer
+
+6) create file app_skin_cancer.py
+
+7) run the flask application
+
+(flask_env) > python app_skin_cancer.py
+
+

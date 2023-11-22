@@ -1,0 +1,99 @@
+=====================================================================
+|           SUPERCOMPUTER INSTRUCTIONS + JUPYTER SERVER             |
+=====================================================================
+
+1) copy jupyter notebook to supercomp
+
+holger2022@DESKTOP-HAT96CV:~$ scp /home/holger2022/ISIC_2023/vit_isic2023_v9_supercomp.ipynb holtech@login1.hpc.spbstu.ru:~/ISIC_2023 
+Enter passphrase for key '/home/holger2022/.ssh/id_rsa':
+vit_isic2023_v9_supercomp.ipynb                                                                                   100% 3260KB   
+
+2) ssh connection with supercomp
+
+holger2022@DESKTOP-HAT96CV:~$ ssh -i ~/.ssh/id_rsa holtech@login1.hpc.spbstu.ru
+Enter passphrase for key '/home/holger2022/.ssh/id_rsa': supercomputation007
+Last login: Tue Sep 26 21:06:19 2023 from 5.18.236.92
+
+  /$$$$$$   /$$$$$$   /$$$$$$         /$$$$$$  /$$$$$$$  /$$       /$$$$$$$  /$$   /$$
+ /$$__  $$ /$$__  $$ /$$__  $$       /$$__  $$| $$__  $$| $$      | $$__  $$| $$  | $$
+| $$  \__/| $$  \__/| $$  \__/      | $$  \__/| $$  \ $$| $$$$$$$ | $$  \ $$| $$  | $$
+|  $$$$$$ | $$      | $$            |  $$$$$$ | $$$$$$$/| $$__  $$| $$$$$$$/| $$  | $$
+ \____  $$| $$      | $$             \____  $$| $$____/ | $$  \ $$| $$____/ | $$  | $$
+ /$$  \ $$| $$    $$| $$    $$       /$$  \ $$| $$      | $$  | $$| $$      | $$  | $$
+|  $$$$$$/|  $$$$$$/|  $$$$$$/      |  $$$$$$/| $$      | $$$$$$$/| $$      |  $$$$$$/
+ \______/  \______/  \______/        \______/ |__/      |_______/ |__/       \______/
+
+
+3) go inside of project files 
+
+holtech@login1:~
+$ cd ISIC_2023
+holtech@login1:~/ISIC_2023
+$ ls
+attribution.txt  jupyter.slurm       metadata_isic2023.csv   slurm-44977.out                  vit_isic2023_v8_supercomp.ipynb
+isic_dicts       keep_cpu_active.sh  models                  slurm-44978.out                  vit_isic2023_v9_supercomp.ipynb
+isic_images      licenses            parallel_jupyter.slurm  vit_isic2023_v7_supercomp.ipynb
+
+4) load python 3.10 to login1 
+
+holtech@login1:~/ISIC_2023
+$ module load python/3.10
+
+5) create slurm script
+
+holtech@login1:~/ISIC_2023
+$ touch parallel_jupyter.slurm
+
+6) content of script parallel_jupyter.slurm
+
+#!/bin/bash
+#SBATCH --gres=gpu:8
+#SBATCH -J jupyter
+#SBATCH -t 0-14
+
+module load python/3.10
+
+export JUPYTER_RUNTIME_DIR=/tmp
+jupyter notebook --ip=$(hostname) --no-browser --port=8888
+
+7) execute slurm script
+
+holtech@login1:~/ISIC_2023
+$ sbatch parallel_jupyter.slurm
+Submitted batch job 45004 on cluster nv
+
+8) check the allocated module
+
+holtech@login1:~/ISIC_2023
+$ squeue
+CLUSTER: nv
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+             45004        nv  jupyter  holtech  R       0:30      1 nv1
+
+9) check the jupyter url generated
+
+holtech@login1:~/ISIC_2023
+$ ls
+attribution.txt  jupyter.slurm       metadata_isic2023.csv   slurm-44978.out                  vit_isic2023_v8_supercomp.ipynb
+isic_dicts       keep_cpu_active.sh  models                  slurm-45004.out                  vit_isic2023_v9_supercomp.ipynb
+isic_images      licenses            parallel_jupyter.slurm  vit_isic2023_v7_supercomp.ipynb
+
+holtech@login1:~/ISIC_2023
+$ vi slurm-45004.out
+
+ Or copy and paste one of these URLs:
+        http://nv1:8888/tree?token=f87ff67004cd68f63ed85217cd145627a6184618ad0fec8c         [url in node]
+        http://127.0.0.1:8888/tree?token=f87ff67004cd68f63ed85217cd145627a6184618ad0fec8c   [url in local]
+
+
+10) create tunnel ssh between local machine, nv1 node and login1 node
+
+holger2022@DESKTOP-HAT96CV:~$ ssh -fN -L 8888:nv1:8888 holtech@login1.hpc.spbstu.ru
+Enter passphrase for key '/home/holger2022/.ssh/id_rsa': supercomputation007
+
+11) copy the best model from supercomp to local linux OS 
+
+holger2022@DESKTOP-HAT96CV:~$ scp holtech@login1.hpc.spbstu.ru:~/ISIC_2023/models/vitL_p32_isic02.pt /home/holger2022/ISIC_2023
+Enter passphrase for key '/home/holger2022/.ssh/id_rsa': supercomputation007
+vitL_p32_isic02.pt
+

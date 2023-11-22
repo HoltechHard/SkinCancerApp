@@ -1,0 +1,21 @@
+=================================================
+|             FRONTEND COMMAND LINES            |
+=================================================
+
+1) clone frontend flask-gentella
+
+> git clone https://github.com/afourmy/flask-gentelella.git
+
+2) install pytorch
+
+> pip install torch
+
+3) install ipykernel, transformers, torchvision and matplotlib
+
+> pip install ipykernel
+
+> pip install transformers
+
+> pip install torchvision
+
+> pip install matplotlib
