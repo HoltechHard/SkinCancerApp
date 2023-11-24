@@ -2,6 +2,15 @@
 
 Intelligent System based on ensembles of transformer vision architectures for skin cancer classification
 
+* System architecture  
+  
+![image](https://github.com/HoltechHard/SkinCancerApp/assets/35493202/4cad55fa-1e2f-48dd-90e5-66185d4de7ff) 
+
+* Technologies and components
+  
+![image](https://github.com/HoltechHard/SkinCancerApp/assets/35493202/c96a9ef7-94ab-4b4c-a081-0ca3ddfb3b09)  
+
+
 * Frontend
 
 1) index.html
