@@ -1,0 +1,17 @@
+# Use the official mysql image as the base image
+FROM mysql:8.3
+
+# set password for mysql root user
+ENV MYSQL_ROOT_PASSWORD=holtech123
+
+# create new directory to store db files
+RUN mkdir -p /docker-entrypoint-initdb.d
+
+# copy database backup file inside the container
+COPY ./db_skin_cancer/db_skin_cancer.sql /docker-entrypoint-initdb.d/
+
+# expose port 3306 to the outside world
+EXPOSE 3306
+
+# configure mysql to use host: localhost and port: 3306
+CMD ["mysqld", "--bind-address=0.0.0.0", "--port=3306"]
