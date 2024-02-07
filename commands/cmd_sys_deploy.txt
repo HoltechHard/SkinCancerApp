@@ -1,0 +1,158 @@
+=========================================
+|           DEPLOYMENT COMMANDS         |
+=========================================
+
+In case to deploy just 1 container
+-----------------------------------
+
+1) build and tag the docker image 
+
+$ docker build -t holtech/app_skin_cancer:1.0 .
+
+** already done 
+
+2) push docker image to docker hub 
+
+$ docker push holtech/app_skin_cancer:1.0 
+
+In the case to deploy 1 service 
+--------------------------------
+- app container 
+- nginx web service container 
+- mysql database container
+
+1) write manifest files Dockerfile-app, Dockerfile-mysql and docker-compose.yaml
+
+2) make backup of mysql database from local machine 
+
+    2.1) create database dump
+
+    - inside local machine, enter to CMD and navigate in path C:\Program Files\MySQL\MySQL Server 8.0\bin
+
+    > cd C:\Program Files\MySQL\MySQL Server 8.0\bin
+
+    - inside this path, write command to create backup file db_skin_cancer.sql which contains 
+      tables, data, stored procedures and triggers 
+
+    C:\Program Files\MySQL\MySQL Server 8.0\bin
+    > mysqldump -u root -p --routines --events db_skin_cancer > "G:\_MASTER_THESIS\SkinCancerProj_v1\db_skin_cancer\db_skin_cancer.sql"
+
+    Enter password: $holtech123     (password from local machine mysql)
+
+    2.2) copy the backup from local machine path to mysql container using Dockerfile-mysql 
+
+
+3) build docker image 
+
+$ docker-compose build
+
+*** after run docker-compose file, will be created the next images: 
+    - holtech/app_skin_cancer
+    - holtech/db_skin_cancer
+
+4) start containers
+
+$ docker-compose up -d
+
+*** after run this command, will be created the next service: 
+    - skincancerproj_v1         ... with the next containers inside the service
+        |
+        |--- skincancerproj_v1-nginx-1          (for nginx web service)
+        |
+        |--- skincancerproj_v1-app-1            (for python + flask application)
+        |
+        |--- skincancerproj_v1-db-1             (for mysql database)
+
+5) all results are possible see in docker desktop logs
+
+6) to make modifications, need eliminate the service and execute the commands to build and up
+
+$ docker-compose down
+
+ ✔ Container skincancerapp-app-1    Removed                                                                                                           0.0s 
+ ✔ Container skincancerapp-db-1     Removed                                                                                                           0.0s 
+ ✔ Network skincancerapp_default    Removed 
+
+$ docker-compose up -d --build
+
+[+] Building 0.0s (0/0)                                                                                                                     docker:default
+[+] Running 4/4
+ ✔ Network skincancerapp_default    Created                                                                                                           0.8s 
+ ✔ Container skincancerapp-db-1     Started                                                                                                           0.2s 
+ ✔ Container skincancerapp-app-1    Started                                                                                                           0.2s 
+ ✔ Container skincancerapp-nginx-1  Started                                                                                                           0.2s 
+
+7) to access directly mysql database inside of container go Exec and run the commands 
+
+    7.1) Access to user 
+
+    sh-4.4# mysql -u root -p
+
+    Enter password: holtech123   (password of mysql container)
+
+    7.2) Access to db 
+
+    mysql> show databases;
+
+    +--------------------+
+    | Database           |
+    +--------------------+
+    | db_skin_cancer     |
+    | information_schema |
+    | mysql              |
+    | performance_schema |
+    | sys                |
+    +--------------------+
+    5 rows in set (0.01 sec)
+
+    mysql> use db_skin_cancer;
+
+    Database changed
+
+    7.3) check existing tables 
+
+    mysql> show tables;
+
+    +--------------------------+
+    | Tables_in_db_skin_cancer |
+    +--------------------------+
+    | patient                  |
+    | scores                   |
+    | type_cancer              |
+    | type_image               |
+    | vw_cancer                |
+    | vw_patient               |
+    +--------------------------+
+    6 rows in set (0.00 sec)
+
+    7.4) make query to check internal data of some table 
+
+    mysql> select * from type_cancer;
+
+    +-----------+----------------------------+
+    | id_cancer | description                |
+    +-----------+----------------------------+
+    |         1 | nevus                      |
+    |         2 | melanoma                   |
+    |         3 | seborrheic keratosis       |
+    |         4 | basal cell carcinoma       |
+    |         5 | actinic keratosis          |
+    |         6 | squamous cell carcinoma    |
+    |         7 | pigmented benign keratosis |
+    +-----------+----------------------------+
+    7 rows in set (0.01 sec)
+
+*** So already mysql database is deployed to container 
+
+8) To check the deployed application consuming nginx web service with mysql database
+    put in the web browser: http://localhost:80 and access the service
+
+9) To check all running containers 
+
+$ docker ps 
+
+CONTAINER ID   IMAGE                        COMMAND                  CREATED             STATUS          PORTS                               NAMES        
+ca7e7f8c67f3   nginx:latest                 "/docker-entrypoint.…"   About an hour ago   Up 11 seconds   0.0.0.0:80->80/tcp                  skincancerproj_v1-nginx-1
+ac986464985f   holtech/app_skin_cancer:v1   "python app_skin_can…"   About an hour ago   Up 13 seconds   0.0.0.0:5000->5000/tcp              skincancerproj_v1-app-1
+99436fb6628b   holtech/db_skin_cancer:v1    "docker-entrypoint.s…"   About an hour ago   Up 14 seconds   33060/tcp, 0.0.0.0:3307->3306/tcp   skincancerproj_v1-db-1
+
