@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  app: 
+    build: 
+      context: .
+      dockerfile: Dockerfile-app
+    image: holtech/app_skin_cancer:v1
+    ports:  
+      - "5000:5000"
+    depends_on:
+      - db
+    volumes:
+      - ./app_skin_cancer:/app/app_skin_cancer
+    networks:
+      - skin-cancer-network
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile-mysql
+    image: holtech/db_skin_cancer:v1
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: db_skin_cancer
+      MYSQL_ROOT_PASSWORD: holtech123
+    networks:
+      - skin-cancer-network
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes: 
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./app_skin_cancer:/usr/share/nginx/html
+    depends_on:
+      - app
+    networks:
+      - skin-cancer-network
+    
+volumes:
+  app_skin_cancer:
+  db_skin_cancer:
+
+networks:
+  skin-cancer-network:
